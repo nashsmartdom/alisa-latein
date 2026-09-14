@@ -1,0 +1,960 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#17152d">
+<title>Alisa · Latein</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --ink:#171728;--muted:#6f7285;--paper:#fff;--line:#e9e8f2;
+  --bg1:#17152d;--bg2:#28235a;--good:#19764c;--goodbg:#eaf8f0;
+  --soft:#f7f6fb;--shadow:0 22px 70px rgba(17,14,55,.20);
+  --accent:#7457ff;--accent2:#ece8ff;
+}
+html,body{
+  margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,
+  BlinkMacSystemFont,"Segoe UI",sans-serif;background:#17152d;color:var(--ink)
+}
+body{min-height:100dvh;overflow-x:hidden}
+.bg{
+  position:fixed;inset:0;pointer-events:none;background:
+  radial-gradient(circle at 12% 8%,rgba(102,213,255,.34),transparent 28%),
+  radial-gradient(circle at 88% 22%,rgba(255,104,170,.24),transparent 28%),
+  radial-gradient(circle at 50% 90%,rgba(134,102,255,.30),transparent 34%),
+  linear-gradient(155deg,var(--bg1),var(--bg2))
+}
+.shell{
+  position:relative;z-index:1;max-width:570px;margin:auto;min-height:100dvh;
+  padding:max(18px,env(safe-area-inset-top)) 14px max(20px,env(safe-area-inset-bottom))
+}
+.topline{display:flex;align-items:center;gap:10px;color:white;margin:2px 4px 18px}
+.logo{
+  width:38px;height:38px;border-radius:13px;display:grid;place-items:center;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.16);
+  font-family:Georgia,serif;font-size:20px
+}
+.brand{font-size:17px;font-weight:850;letter-spacing:-.02em;flex:1}
+.iconbtn{
+  width:42px;height:42px;border-radius:14px;border:1px solid rgba(255,255,255,.15);
+  color:white;background:rgba(255,255,255,.10);font-size:17px
+}
+.screen{display:none}.screen.show{display:block}
+
+/* Home */
+body.home-active .topline{display:none}
+body.home-active .shell{
+  min-height:100dvh;display:block;
+  padding:max(14px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom))
+}
+#home.show{
+  width:100%;height:auto;overflow:visible;
+  min-height:calc(100dvh - max(28px,env(safe-area-inset-top)) - max(28px,env(safe-area-inset-bottom)));
+  display:flex;align-items:center;justify-content:center
+}
+.home-clean{width:100%;max-width:540px;margin:0;transform:translateY(-1.5dvh)}
+.home-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  color:white;margin:0 4px 14px
+}
+.home-appname{
+  font-size:13px;font-weight:850;letter-spacing:.02em;
+  color:rgba(255,255,255,.66);margin-bottom:3px
+}
+.home-head h1{margin:0;font-size:34px;line-height:1;font-weight:950;letter-spacing:-.045em}
+.stats-mini{
+  flex:0 0 auto;width:44px;height:44px;border:1px solid rgba(255,255,255,.14);
+  border-radius:15px;background:rgba(255,255,255,.10);color:white;font:inherit;font-size:16px
+}
+.chart-icon{
+  width:20px;height:20px;display:flex;align-items:flex-end;justify-content:center;
+  gap:3px;margin:auto
+}
+.chart-icon i{display:block;width:3px;border-radius:3px;background:currentColor}
+.chart-icon i:nth-child(1){height:7px;opacity:.66}
+.chart-icon i:nth-child(2){height:12px;opacity:.82}
+.chart-icon i:nth-child(3){height:17px}
+.focus-row{
+  display:flex;align-items:center;gap:7px;min-height:40px;
+  margin:0 2px 12px;padding:8px 10px;border-radius:15px;
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.12);
+  color:white;overflow:hidden
+}
+.focus-label{font-size:11px;font-weight:900;white-space:nowrap;opacity:.8}
+.focus-row .focuschips{display:flex;gap:5px;margin:0;min-width:0;overflow:hidden}
+.focus-row .focuschip{
+  font-size:10px;font-weight:850;padding:5px 7px;border-radius:999px;
+  background:rgba(255,255,255,.14);white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mode{
+  border:0;border-radius:22px;background:var(--paper);padding:15px;text-align:left;
+  box-shadow:0 14px 34px rgba(17,14,55,.16);min-height:132px;height:132px;
+  color:var(--ink);position:relative;overflow:hidden;
+  display:flex;align-items:flex-end;justify-content:flex-start;gap:12px
+}
+.mode:active{transform:scale(.985)}
+.mode::after{
+  content:"";position:absolute;width:72px;height:72px;border-radius:50%;
+  right:-24px;top:-22px;background:var(--wash,#eee);opacity:.72
+}
+.mode .glyph{
+  position:absolute;z-index:1;left:14px;top:14px;width:43px;height:43px;
+  border-radius:14px;display:grid;place-items:center;
+  background:var(--wash,#eee);color:var(--tone,#555);font-weight:900;font-size:20px
+}
+.m1{--wash:#e8f7ff;--tone:#1678a4;background:#f8fdff}
+.m2{--wash:#f0eaff;--tone:#7251d6;background:#fbf9ff}
+.m3{--wash:#e7fbf3;--tone:#16805b;background:#f7fffb}
+.m4{--wash:#fff0e4;--tone:#b85d18;background:#fffaf5}
+.m5{--wash:#eef1ff;--tone:#5264b8;background:#fafbff}
+.table-tile{grid-column:1 / -1;min-height:92px;height:92px}
+.table-tile .glyph{top:24px}
+.table-tile .tiletext{margin-left:58px;margin-top:0;align-self:center}
+.reference-card{background:white;border-radius:28px;padding:20px 18px;box-shadow:var(--shadow)}
+.reference-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.reference-kicker{font-size:11px;font-weight:850;color:var(--muted);margin-bottom:3px}
+.reference-head h2{font-size:28px;letter-spacing:-.035em;margin:0}
+.ref-home{width:auto;padding:10px 13px}
+.ending-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin:0 0 12px}
+.ending-strip span{background:var(--accent2);color:var(--accent);border-radius:10px;padding:7px 2px;text-align:center;font-size:11px;font-weight:900}
+.ref-tabs{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+  background:var(--soft);padding:5px;border-radius:14px;margin-bottom:12px
+}
+.ref-tab{
+  border:0;border-radius:10px;background:transparent;color:var(--muted);
+  padding:9px 4px;font:inherit;font-size:11px;font-weight:900
+}
+.ref-tab.active{background:white;color:var(--accent);box-shadow:0 3px 10px rgba(30,25,70,.08)}
+.ref-pane{display:none}.ref-pane.show{display:grid;gap:9px}
+.source-line{font-size:10px;color:#999baa;text-align:center;margin-bottom:1px}
+.verb-card{
+  border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden
+}
+.verb-card summary{
+  list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 13px;cursor:pointer
+}
+.verb-card summary::-webkit-details-marker{display:none}
+.verb-card summary b{font-size:14px}
+.verb-card summary span{font-size:11px;color:var(--muted);white-space:nowrap}
+.verb-card[open] summary{background:var(--soft);border-bottom:1px solid var(--line)}
+.verb-forms{display:grid;grid-template-columns:72px 1fr}
+.verb-forms.two-col{grid-template-columns:74px 1fr 74px 1fr}
+.verb-forms span,.verb-forms b{
+  padding:9px 10px;border-bottom:1px solid var(--line)
+}
+.verb-forms span{font-size:10px;color:var(--muted);font-weight:800}
+.verb-forms b{font-size:13px}
+.case-grid{display:grid;grid-template-columns:88px 1fr 1fr}
+.case-grid span,.case-grid b{
+  padding:8px 9px;border-bottom:1px solid var(--line)
+}
+.case-grid span{font-size:10px;color:var(--muted);font-weight:800}
+.case-grid b{font-size:12px}
+.case-grid>span:first-child,.case-grid>b:nth-child(2),.case-grid>b:nth-child(3){
+  background:#fbfbfd;color:var(--muted);font-size:10px
+}
+.ending-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin:0 0 2px}
+.ending-strip span{
+  background:var(--accent2);color:var(--accent);border-radius:10px;
+  padding:7px 2px;text-align:center;font-size:10px;font-weight:900
+}
+
+.tiletext{position:relative;z-index:1;min-width:0;margin-top:auto}
+.tiletext b{
+  display:block;font-size:24px;line-height:1.05;margin:0 0 4px;
+  letter-spacing:-.025em
+}
+.tiletext span{display:block;font-size:11px;line-height:1.2;color:var(--muted);white-space:normal}
+
+/* Lesson */
+.lessonhead{color:white;margin:0 3px 11px}
+.meta{
+  display:flex;justify-content:space-between;gap:12px;font-size:12px;
+  color:rgba(255,255,255,.72);margin-bottom:8px
+}
+.track{height:7px;border-radius:99px;background:rgba(255,255,255,.16);overflow:hidden}
+.track div{
+  height:100%;width:0;border-radius:inherit;
+  background:linear-gradient(90deg,#5de1f0,#a98aff,#ff8ebd);transition:width .22s ease
+}
+.card{
+  background:var(--paper);border-radius:28px;min-height:505px;padding:21px 18px 18px;
+  box-shadow:var(--shadow);display:flex;flex-direction:column;position:relative;overflow:hidden
+}
+.card::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--accent)
+}
+.tag{
+  display:inline-flex;align-self:flex-start;align-items:center;gap:7px;
+  background:var(--accent2);color:var(--accent);border-radius:999px;padding:7px 10px;
+  font-size:11px;font-weight:900;letter-spacing:.02em;margin-bottom:21px
+}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.prompt{font-size:29px;line-height:1.14;letter-spacing:-.035em;margin:0 0 8px;font-weight:900}
+.sub{font-size:14px;line-height:1.45;color:var(--muted);margin:0 0 16px}
+.context{
+  font-family:Georgia,"Times New Roman",serif;background:var(--soft);border:1px solid var(--line);
+  border-radius:18px;padding:15px;font-size:21px;line-height:1.48;margin:2px 0 17px
+}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}
+.option{
+  border:1px solid var(--line);background:white;color:var(--ink);border-radius:17px;
+  min-height:61px;padding:12px 10px;font:inherit;font-size:14px;font-weight:800;text-align:center
+}
+.option:active{transform:scale(.985)}.option:disabled{opacity:1}
+.option.right{background:var(--goodbg);border-color:#74c9a0;color:var(--good)}
+.option.wrong{background:#fff0ef;border-color:#f2aaa5;color:#ad352e}
+.answerbox{display:flex;gap:8px;margin-top:auto}
+.answerbox[hidden]{display:none!important}
+.answerbox input{
+  flex:1;min-width:0;border:1px solid var(--line);background:var(--soft);color:var(--ink);
+  border-radius:17px;padding:14px 13px;font:inherit;font-size:18px;outline:none
+}
+.answerbox input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent2)}
+.primary{
+  border:0;border-radius:17px;background:var(--accent);color:white;
+  font:inherit;font-weight:850;padding:14px 17px
+}
+.feedback{display:none;margin-top:13px;border-radius:17px;padding:13px 14px;font-size:14px;line-height:1.45}
+.feedback.good{display:block;background:var(--goodbg);color:var(--good)}
+.feedback.near{display:block;background:#fff5ea;color:#985315}
+.next{display:none;margin-top:10px}.next.show{display:block}
+.source{font-size:10px;color:#a0a1ad;margin-top:12px;text-align:center}
+
+/* Finish */
+.finish{text-align:center;display:none;margin:auto 0}.finish.show{display:block}
+.finishmark{
+  width:70px;height:70px;border-radius:24px;margin:0 auto 17px;display:grid;place-items:center;
+  font-size:34px;color:white;background:linear-gradient(145deg,#4ecbd8,#8066ff,#f47fa7);
+  box-shadow:0 14px 35px rgba(116,87,255,.28)
+}
+.finish h2{font-size:30px;letter-spacing:-.035em;margin:0 0 7px}
+.finish p{margin:0 auto 18px;color:var(--muted);line-height:1.45;max-width:370px}
+.resultbox{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:0 0 15px}
+.result{background:var(--soft);border-radius:17px;padding:13px;text-align:left}
+.result span{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}
+.result b{font-size:14px;line-height:1.3}
+.finishactions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+
+/* Parent statistics */
+.parent{background:white;border-radius:28px;padding:20px 18px;box-shadow:var(--shadow)}
+.parent h2{font-size:27px;letter-spacing:-.035em;margin:0 0 4px}
+.parent>.lead{color:var(--muted);font-size:13px;margin:0 0 17px}
+.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.stat{background:var(--soft);border-radius:17px;padding:13px 7px;text-align:center}
+.stat b{font-size:21px;display:block}.stat span{font-size:10px;color:var(--muted)}
+.skill{margin:13px 1px}
+.skillrow{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
+.bar{height:8px;background:#ecebf2;border-radius:99px;overflow:hidden}
+.bar div{height:100%;border-radius:inherit;background:linear-gradient(90deg,#52cbd8,#7c63ff)}
+.parentactions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:19px}
+.ghost{
+  border:1px solid var(--line);background:white;color:var(--ink);border-radius:16px;
+  padding:13px;font:inherit;font-weight:800
+}
+.note{font-size:11px;color:var(--muted);line-height:1.45;margin-top:15px}
+
+@media(max-width:390px){
+  .home-head h1{font-size:31px}
+  .choices{gap:9px;grid-template-rows:124px 124px 86px}
+  .mode{min-height:124px;height:124px;padding:14px}.table-tile{min-height:86px;height:86px}
+  .mode .glyph{width:40px;height:40px;font-size:18px}
+  .tiletext b{font-size:22px}
+  .tiletext span{font-size:10px}
+  .prompt{font-size:25px}
+  .card{min-height:480px}
+  .option{font-size:13px;padding:11px 7px}
+}
+@media(max-height:760px){
+  body:not(.home-active) .shell{
+    padding-top:max(10px,env(safe-area-inset-top));
+    padding-bottom:max(10px,env(safe-area-inset-bottom))
+  }
+  body:not(.home-active) .topline{margin-bottom:9px}
+  #home.show{align-items:flex-start;padding-top:14px}
+  .home-clean{transform:none}
+  .home-head{margin-bottom:10px}
+  .home-head h1{font-size:29px}
+  .focus-row{margin-bottom:9px}
+  .choices{grid-template-rows:112px 112px 80px}
+  .mode{min-height:112px;height:112px}.table-tile{min-height:80px;height:80px}.table-tile .glyph{top:19px}
+}
+@media(max-height:700px){
+  body:not(.home-active) .topline{margin-bottom:8px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto!important;transition:none!important}
+}
+</style>
+</head>
+<body class="home-active">
+<div class="bg"></div>
+<div class="shell">
+  <div class="topline">
+    <div class="logo">L</div>
+    <div class="brand">Alisa · Latein</div>
+    <button class="iconbtn" id="homeBtn" aria-label="Startseite" hidden>⌂</button>
+  </div>
+
+  <section class="screen show" id="home">
+    <div class="home-clean">
+      <div class="home-head">
+        <div>
+          <div class="home-appname">Alisa · Latein</div>
+          <h1>Was üben?</h1>
+        </div>
+        <button class="stats-mini" id="parentBtn" aria-label="Lernstatistik"><span class="chart-icon" aria-hidden="true"><i></i><i></i><i></i></span></button>
+      </div>
+
+      <div class="focus-row">
+        <span class="focus-label">Heute</span>
+        <div class="focuschips" id="focusChips"></div>
+      </div>
+
+      <div class="choices tile-grid v5-grid">
+        <button class="mode tile m1" data-mode="mix" data-n="8">
+          <div class="glyph">5</div>
+          <div class="tiletext"><b>5 Min</b><span>Gemischt</span></div>
+        </button>
+        <button class="mode tile m2" data-mode="mix" data-n="16">
+          <div class="glyph">10</div>
+          <div class="tiletext"><b>10 Min</b><span>Gemischt</span></div>
+        </button>
+        <button class="mode tile m3" data-mode="words" data-n="12">
+          <div class="glyph">Aa</div>
+          <div class="tiletext"><b>Wörter</b><span>Vokabeln</span></div>
+        </button>
+        <button class="mode tile m4" data-mode="forms" data-n="12">
+          <div class="glyph">↔</div>
+          <div class="tiletext"><b>Formen</b><span>Kasus & Deklination</span></div>
+        </button>
+        <button class="mode tile m5 table-tile" id="tablesBtn">
+          <div class="glyph">≡</div>
+          <div class="tiletext"><b>Tabellen</b><span>Deklination · Präsens · Perfekt</span></div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="lesson">
+    <div class="lessonhead">
+      <div class="meta"><span id="counter"></span><span id="secureCount"></span></div>
+      <div class="track"><div id="progress"></div></div>
+    </div>
+    <div class="card" id="card">
+      <div class="tag" id="tag"><span class="dot"></span><span id="tagText"></span></div>
+      <h1 class="prompt" id="prompt"></h1>
+      <p class="sub" id="sub"></p>
+      <div class="context" id="context" hidden></div>
+      <div class="options" id="options"></div>
+      <div class="answerbox" id="answerbox" hidden>
+        <input id="textAnswer" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="done">
+        <button class="primary" id="checkBtn">Prüfen</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <button class="primary next" id="nextBtn">Weiter</button>
+      <div class="source" id="source"></div>
+
+      <div class="finish" id="finish">
+        <div class="finishmark">✓</div>
+        <h2>Für heute reicht’s.</h2>
+        <p id="finishText"></p>
+        <div class="resultbox">
+          <div class="result"><span>Schon sicherer</span><b id="strongSkill">–</b></div>
+          <div class="result"><span>Noch einmal ansehen</span><b id="weakSkill">–</b></div>
+        </div>
+        <div class="finishactions">
+          <button class="ghost" id="finishHome">Fertig</button>
+          <button class="primary" id="fiveMore">Noch 5</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="tables">
+    <div class="reference-card">
+      <div class="reference-head">
+        <div>
+          <div class="reference-kicker">Lehrerübersichten</div>
+          <h2>Tabellen</h2>
+        </div>
+        <button class="ghost ref-home" id="tablesHome">Zurück</button>
+      </div>
+
+      <div class="ref-tabs" role="tablist" aria-label="Grammatiktabellen">
+        <button class="ref-tab active" data-ref="decl">Deklination</button>
+        <button class="ref-tab" data-ref="pres">Präsens</button>
+        <button class="ref-tab" data-ref="perf">Perfekt</button>
+      </div>
+
+      <div class="ref-pane show" id="ref-decl">
+        <div class="source-line">Grammatikübersicht Teil I · Klasse 6.1 · 17.10.2025</div>
+
+        <details class="verb-card" open>
+          <summary><b>a-Deklination</b><span>amica</span></summary>
+          <div class="case-grid">
+            <span></span><b>Singular</b><b>Plural</b>
+            <span>Nominativ</span><b>amica</b><b>amicae</b>
+            <span>Genitiv</span><b>amicae</b><b>amicarum</b>
+            <span>Dativ</span><b>amicae</b><b>amicis</b>
+            <span>Akkusativ</span><b>amicam</b><b>amicas</b>
+            <span>Ablativ</span><b>amica</b><b>amicis</b>
+          </div>
+        </details>
+
+        <details class="verb-card">
+          <summary><b>o-Deklination · Maskulina</b><span>reus</span></summary>
+          <div class="case-grid">
+            <span></span><b>Singular</b><b>Plural</b>
+            <span>Nominativ</span><b>reus</b><b>rei</b>
+            <span>Genitiv</span><b>rei</b><b>reorum</b>
+            <span>Dativ</span><b>reo</b><b>reis</b>
+            <span>Akkusativ</span><b>reum</b><b>reos</b>
+            <span>Ablativ</span><b>reo</b><b>reis</b>
+          </div>
+        </details>
+
+        <details class="verb-card">
+          <summary><b>o-Deklination · Neutra</b><span>dubium</span></summary>
+          <div class="case-grid">
+            <span></span><b>Singular</b><b>Plural</b>
+            <span>Nominativ</span><b>dubium</b><b>dubia</b>
+            <span>Genitiv</span><b>dubii</b><b>dubiorum</b>
+            <span>Dativ</span><b>dubio</b><b>dubiis</b>
+            <span>Akkusativ</span><b>dubium</b><b>dubia</b>
+            <span>Ablativ</span><b>dubio</b><b>dubiis</b>
+          </div>
+        </details>
+
+        <details class="verb-card">
+          <summary><b>konsonantische Deklination</b><span>mater</span></summary>
+          <div class="case-grid">
+            <span></span><b>Singular</b><b>Plural</b>
+            <span>Nominativ</span><b>mater</b><b>matres</b>
+            <span>Genitiv</span><b>matris</b><b>matrum</b>
+            <span>Dativ</span><b>matri</b><b>matribus</b>
+            <span>Akkusativ</span><b>matrem</b><b>matres</b>
+            <span>Ablativ</span><b>matre</b><b>matribus</b>
+          </div>
+        </details>
+      </div>
+
+      <div class="ref-pane" id="ref-pres">
+        <div class="source-line">Grammatikübersicht Teil II · Lektion 5 und 7 · 18.02.2026</div>
+
+        <details class="verb-card" open>
+          <summary><b>a-Konjugation</b><span>clamare</span></summary>
+          <div class="verb-forms two-col">
+            <span>1. Sg.</span><b>clamo</b><span>1. Pl.</span><b>clamamus</b>
+            <span>2. Sg.</span><b>clamas</b><span>2. Pl.</span><b>clamatis</b>
+            <span>3. Sg.</span><b>clamat</b><span>3. Pl.</span><b>clamant</b>
+            <span>Imperativ Sg.</span><b>clama</b><span>Imperativ Pl.</span><b>clamate</b>
+          </div>
+        </details>
+
+        <details class="verb-card">
+          <summary><b>e-Konjugation</b><span>videre</span></summary>
+          <div class="verb-forms two-col">
+            <span>1. Sg.</span><b>video</b><span>1. Pl.</span><b>videmus</b>
+            <span>2. Sg.</span><b>vides</b><span>2. Pl.</span><b>videtis</b>
+            <span>3. Sg.</span><b>videt</b><span>3. Pl.</span><b>vident</b>
+            <span>Imperativ Sg.</span><b>vide</b><span>Imperativ Pl.</span><b>videte</b>
+          </div>
+        </details>
+
+        <details class="verb-card">
+          <summary><b>i-Konjugation</b><span>venire</span></summary>
+          <div class="verb-forms two-col">
+            <span>1. Sg.</span><b>venio</b><span>1. Pl.</span><b>venimus</b>
+            <span>2. Sg.</span><b>venis</b><span>2. Pl.</span><b>venitis</b>
+            <span>3. Sg.</span><b>venit</b><span>3. Pl.</span><b>veniunt</b>
+            <span>Imperativ Sg.</span><b>veni</b><span>Imperativ Pl.</span><b>venite</b>
+          </div>
+        </details>
+
+        <details class="verb-card">
+          <summary><b>konsonantische Konjugation</b><span>petere</span></summary>
+          <div class="verb-forms two-col">
+            <span>1. Sg.</span><b>peto</b><span>1. Pl.</span><b>petimus</b>
+            <span>2. Sg.</span><b>petis</b><span>2. Pl.</span><b>petitis</b>
+            <span>3. Sg.</span><b>petit</b><span>3. Pl.</span><b>petunt</b>
+            <span>Imperativ Sg.</span><b>pete</b><span>Imperativ Pl.</span><b>petite</b>
+          </div>
+        </details>
+
+        <details class="verb-card">
+          <summary><b>konsonantische Konjugation · i-Erweiterung</b><span>capere</span></summary>
+          <div class="verb-forms two-col">
+            <span>1. Sg.</span><b>capio</b><span>1. Pl.</span><b>capimus</b>
+            <span>2. Sg.</span><b>capis</b><span>2. Pl.</span><b>capitis</b>
+            <span>3. Sg.</span><b>capit</b><span>3. Pl.</span><b>capiunt</b>
+            <span>Imperativ Sg.</span><b>cape</b><span>Imperativ Pl.</span><b>capite</b>
+          </div>
+        </details>
+
+        <details class="verb-card">
+          <summary><b>Unregelmäßig</b><span>velle</span></summary>
+          <div class="verb-forms two-col">
+            <span>1. Sg.</span><b>volo</b><span>1. Pl.</span><b>volumus</b>
+            <span>2. Sg.</span><b>vis</b><span>2. Pl.</span><b>vultis</b>
+            <span>3. Sg.</span><b>vult</b><span>3. Pl.</span><b>volunt</b>
+          </div>
+        </details>
+
+        <details class="verb-card">
+          <summary><b>Unregelmäßig</b><span>nolle</span></summary>
+          <div class="verb-forms two-col">
+            <span>1. Sg.</span><b>nolo</b><span>1. Pl.</span><b>nolumus</b>
+            <span>2. Sg.</span><b>non vis</b><span>2. Pl.</span><b>non vultis</b>
+            <span>3. Sg.</span><b>non vult</b><span>3. Pl.</span><b>nolunt</b>
+          </div>
+        </details>
+      </div>
+
+      <div class="ref-pane" id="ref-perf">
+        <div class="source-line">Lektion 8 · offizieller Auftrag · 02.06.2026</div>
+
+        <div class="ending-strip">
+          <span>-i</span><span>-isti</span><span>-it</span><span>-imus</span><span>-istis</span><span>-erunt</span>
+        </div>
+
+        <details class="verb-card" open>
+          <summary><b>clamare</b><span>Perfekt</span></summary>
+          <div class="verb-forms">
+            <span>1. Sg.</span><b>clamavi</b>
+            <span>2. Sg.</span><b>clamavisti</b>
+            <span>3. Sg.</span><b>clamavit</b>
+            <span>1. Pl.</span><b>clamavimus</b>
+            <span>2. Pl.</span><b>clamavistis</b>
+            <span>3. Pl.</span><b>clamaverunt</b>
+          </div>
+        </details>
+
+        <details class="verb-card">
+          <summary><b>audire</b><span>Perfekt</span></summary>
+          <div class="verb-forms">
+            <span>1. Sg.</span><b>audivi</b>
+            <span>2. Sg.</span><b>audivisti</b>
+            <span>3. Sg.</span><b>audivit</b>
+            <span>1. Pl.</span><b>audivimus</b>
+            <span>2. Pl.</span><b>audivistis</b>
+            <span>3. Pl.</span><b>audiverunt</b>
+          </div>
+        </details>
+
+        <details class="verb-card">
+          <summary><b>tacere</b><span>Perfekt</span></summary>
+          <div class="verb-forms">
+            <span>1. Sg.</span><b>tacui</b>
+            <span>2. Sg.</span><b>tacuisti</b>
+            <span>3. Sg.</span><b>tacuit</b>
+            <span>1. Pl.</span><b>tacuimus</b>
+            <span>2. Pl.</span><b>tacuistis</b>
+            <span>3. Pl.</span><b>tacuerunt</b>
+          </div>
+        </details>
+
+        <details class="verb-card">
+          <summary><b>esse</b><span>Perfekt</span></summary>
+          <div class="verb-forms">
+            <span>1. Sg.</span><b>fui</b>
+            <span>2. Sg.</span><b>fuisti</b>
+            <span>3. Sg.</span><b>fuit</b>
+            <span>1. Pl.</span><b>fuimus</b>
+            <span>2. Pl.</span><b>fuistis</b>
+            <span>3. Pl.</span><b>fuerunt</b>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="parents">
+    <div class="parent">
+      <h2>Lernstatistik</h2>
+      <p class="lead">Diagnostik für Erwachsene – im Lernmodus absichtlich nicht sichtbar.</p>
+      <div class="statgrid">
+        <div class="stat"><b id="sFirst">–</b><span>1. Versuch</span></div>
+        <div class="stat"><b id="sCount">0</b><span>Antworten</span></div>
+        <div class="stat"><b id="sDue">0</b><span>fällig</span></div>
+      </div>
+      <div id="skills"></div>
+      <div class="parentactions">
+        <button class="ghost" id="exportBtn">JSON exportieren</button>
+        <button class="primary" id="parentBack">Zurück</button>
+      </div>
+      <div class="note">
+        Quelle des aktuellen Stoffes: Vorbereitung 1. Klassenarbeit, 07.09.2026.
+        Perfekt-Beispiele <i>clamare, audire, tacere, esse</i> stammen aus dem offiziellen
+        Lektion-8-Auftrag vom 02.06.2026. Antworten und Zeiten werden nur lokal auf diesem Gerät gespeichert.
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+'use strict';
+
+const STORE='alisa_latein_v2';
+const DAY=86400000;
+const SOURCE_PREP='Vorbereitung 1. Klassenarbeit · 07.09.2026';
+const SOURCE_PERF='Lektion 8 · Perfekt-Auftrag · 02.06.2026';
+const SOURCE_ERROR='Fehlerlog · 13.09.2026';
+
+const palette={
+  'Vokabeln':['#16805b','#e7fbf3'],
+  'Kasus & Funktion':['#7251d6','#f0eaff'],
+  'Deklination':['#b85d18','#fff0e4'],
+  'Verbform & Subjekt':['#c14f79','#ffeaf2'],
+  'Satzanalyse':['#1678a4','#e8f7ff'],
+  'Perfekt':['#806100','#fff7cf']
+};
+
+const vocab=[
+ ['cur','warum?'],['nonne','etwa nicht?'],['num','etwa?'],['bene','gut'],
+ ['denique','schließlich / zuletzt'],['ita','so'],['itaque','deshalb'],['semper','immer'],
+ ['cum + Ablativ','mit'],['de + Ablativ','von / über'],['in + Akkusativ','in … hinein / nach'],
+ ['in + Ablativ','in / bei'],['per + Akkusativ','durch'],
+ ['clamor, oris m.','der Schrei / das Geschrei'],['deus, i m.','der Gott'],
+ ['filius, i m.','der Sohn'],['forum, i n.','der Markt / das Forum'],['ira, ae f.','die Wut / der Zorn'],
+ ['mercator, oris m.','der Kaufmann'],['pater, patris m.','der Vater'],['rex, regis m.','der König'],
+ ['Roma, ae f.','Rom'],['Romanus, i m.','der Römer'],['templum, i n.','der Tempel'],
+ ['agere, ago, egi','handeln / tun / treiben'],['capere, capio, cepi','erobern / fangen / nehmen / ergreifen'],
+ ['mittere, mitto, misi','werfen / schicken'],['narrare, narro, narravi','erzählen'],
+ ['necare, neco, necavi','töten'],['orare, oro, oravi','bitten / beten'],
+ ['ostendere, ostendo, ostendi','zeigen / erklären'],['parere, pareo, parui','gehorchen'],
+ ['properare, propero, properavi','eilen'],['respondere, respondeo, respondi','antworten'],
+ ['ridere, rideo, risi','lachen'],['vivere, vivo, vixi','leben']
+];
+
+const nouns=[
+ {lemma:'filius',forms:{nomS:'filius',genS:'filii',datS:'filio',accS:'filium',ablS:'filio',nomP:'filii',genP:'filiorum',datP:'filiis',accP:'filios',ablP:'filiis'}},
+ {lemma:'forum',forms:{nomS:'forum',genS:'fori',datS:'foro',accS:'forum',ablS:'foro',nomP:'fora',genP:'fororum',datP:'foris',accP:'fora',ablP:'foris'}},
+ {lemma:'ira',forms:{nomS:'ira',genS:'irae',datS:'irae',accS:'iram',ablS:'ira',nomP:'irae',genP:'irarum',datP:'iris',accP:'iras',ablP:'iris'}},
+ {lemma:'mercator',forms:{nomS:'mercator',genS:'mercatoris',datS:'mercatori',accS:'mercatorem',ablS:'mercatore',nomP:'mercatores',genP:'mercatorum',datP:'mercatoribus',accP:'mercatores',ablP:'mercatoribus'}},
+ {lemma:'pater',forms:{nomS:'pater',genS:'patris',datS:'patri',accS:'patrem',ablS:'patre',nomP:'patres',genP:'patrum',datP:'patribus',accP:'patres',ablP:'patribus'}},
+ {lemma:'rex',forms:{nomS:'rex',genS:'regis',datS:'regi',accS:'regem',ablS:'rege',nomP:'reges',genP:'regum',datP:'regibus',accP:'reges',ablP:'regibus'}},
+ {lemma:'Romanus',forms:{nomS:'Romanus',genS:'Romani',datS:'Romano',accS:'Romanum',ablS:'Romano',nomP:'Romani',genP:'Romanorum',datP:'Romanis',accP:'Romanos',ablP:'Romanis'}},
+ {lemma:'templum',forms:{nomS:'templum',genS:'templi',datS:'templo',accS:'templum',ablS:'templo',nomP:'templa',genP:'templorum',datP:'templis',accP:'templa',ablP:'templis'}},
+ {lemma:'clamor',forms:{nomS:'clamor',genS:'clamoris',datS:'clamori',accS:'clamorem',ablS:'clamore',nomP:'clamores',genP:'clamorum',datP:'clamoribus',accP:'clamores',ablP:'clamoribus'}}
+];
+
+const caseLabel={nomS:'Nominativ Singular',genS:'Genitiv Singular',datS:'Dativ Singular',
+ accS:'Akkusativ Singular',ablS:'Ablativ Singular',nomP:'Nominativ Plural',genP:'Genitiv Plural',
+ datP:'Dativ Plural',accP:'Akkusativ Plural',ablP:'Ablativ Plural'};
+
+let questions=[
+ {id:'cum_philippo',skill:'Kasus & Funktion',type:'mc',source:SOURCE_ERROR,
+  prompt:'Was ist „cum Philippo“?',context:'Publius cum Philippo in forum properavit.',
+  options:['Begleitung · cum + Ablativ','Ort · in + Ablativ','Richtung · in + Akkusativ','Dativobjekt'],
+  answer:0,explain:'Fast merken: cum + Ablativ → Begleitung. Frage: Mit wem?'},
+ {id:'in_forum',skill:'Kasus & Funktion',type:'mc',source:SOURCE_ERROR,
+  prompt:'Was ist „in forum“?',context:'Publius cum Philippo in forum properavit.',
+  options:['Ort · Wo?','Richtung · Wohin?','Begleitung · Mit wem?','Dativobjekt'],
+  answer:1,explain:'in + Akkusativ → Richtung. Frage: Wohin?'},
+ {id:'prep_de',skill:'Kasus & Funktion',type:'mc',source:SOURCE_PREP,
+  prompt:'Welcher Kasus folgt auf „de“?',context:'de + …',
+  options:['Nominativ','Genitiv','Akkusativ','Ablativ'],answer:3,
+  explain:'de + Ablativ → von / über.'},
+ {id:'prep_per',skill:'Kasus & Funktion',type:'mc',source:SOURCE_PREP,
+  prompt:'Welcher Kasus folgt auf „per“?',context:'per + …',
+  options:['Nominativ','Genitiv','Akkusativ','Ablativ'],answer:2,
+  explain:'per + Akkusativ → durch.'},
+ {id:'amico',skill:'Satzanalyse',type:'mc',source:SOURCE_PREP,
+  prompt:'Welche Funktion hat „amico“?',context:'… quod amico urbem ostendere voluit.',
+  options:['Subjekt','Dativobjekt','Akkusativobjekt','Prädikat'],answer:1,
+  explain:'amico = Dativ Singular → Dativobjekt: „dem Freund“.'},
+ {id:'urbem',skill:'Satzanalyse',type:'mc',source:SOURCE_PREP,
+  prompt:'Welche Funktion hat „urbem“?',context:'… quod amico urbem ostendere voluit.',
+  options:['Dativobjekt','Subjekt','Akkusativobjekt','adverbiale Bestimmung'],answer:2,
+  explain:'urbem = Akkusativ Singular → Akkusativobjekt: „die Stadt“.'},
+ {id:'properavit',skill:'Verbform & Subjekt',type:'mc',source:SOURCE_ERROR,
+  prompt:'„properavit“ ist …',context:'Publius … properavit.',
+  options:['3. Pers. Sg. Perfekt','3. Pers. Pl. Perfekt','Infinitiv','3. Pers. Sg. Präsens'],answer:0,
+  explain:'-it → 3. Person Singular; properavit ist Perfekt.'},
+ {id:'spectaverunt',skill:'Verbform & Subjekt',type:'mc',source:SOURCE_PREP,
+  prompt:'„spectaverunt“ ist …',context:'Ibi amici aedificia et templa deorum spectaverunt.',
+  options:['3. Pers. Sg.','3. Pers. Pl.','1. Pers. Pl.','Infinitiv'],answer:1,
+  explain:'-erunt → 3. Person Plural. „amici“ ist ebenfalls Plural.'},
+ {id:'voluit',skill:'Verbform & Subjekt',type:'mc',source:SOURCE_ERROR,
+  prompt:'Warum ist „voluit“ Singular?',context:'Publius … quod amico urbem ostendere voluit.',
+  options:['wegen „urbem“','weil Publius Singular ist','weil „amico“ Dativ ist','Perfekt ist immer Singular'],
+  answer:1,explain:'Die Verbform richtet sich nach dem Subjekt: Publius = Singular → voluit.'},
+ {id:'subject_publius',skill:'Verbform & Subjekt',type:'mc',source:SOURCE_ERROR,
+  prompt:'Wer ist das Subjekt?',context:'Publius cum Philippo in forum properavit.',
+  options:['Publius','Philippus','Publius und Philippus','forum'],answer:0,
+  explain:'Subjekt ist Publius. „cum Philippo“ ist Begleitung.'},
+ {id:'philippus_nom',skill:'Deklination',type:'text',source:SOURCE_ERROR,
+  prompt:'Setze die richtige Form ein.',sub:'Beide Namen sind Subjekt.',
+  context:'Publius et ___ responderunt.  (Philippus)',answers:['philippus'],
+  explain:'Als Teil des Subjekts steht Philippus im Nominativ.'},
+ {id:'philippus_abl',skill:'Deklination',type:'text',source:SOURCE_ERROR,
+  prompt:'Setze die richtige Form ein.',sub:'cum + Ablativ',
+  context:'Publius cum ___ in forum properavit.  (Philippus)',answers:['philippo'],
+  explain:'cum + Ablativ → Philippo.'},
+ {id:'perf_clamavit',skill:'Perfekt',type:'text',source:SOURCE_PERF,
+  prompt:'3. Person Singular Perfekt von „clamare“',answers:['clamavit'],
+  explain:'clamare → clamavit.'},
+ {id:'perf_audiverunt',skill:'Perfekt',type:'text',source:SOURCE_PERF,
+  prompt:'3. Person Plural Perfekt von „audire“',answers:['audiverunt'],
+  explain:'audire → audiverunt.'},
+ {id:'perf_tacuit',skill:'Perfekt',type:'text',source:SOURCE_PERF,
+  prompt:'3. Person Singular Perfekt von „tacere“',answers:['tacuit'],
+  explain:'tacere → tacuit.'},
+ {id:'perf_fuerunt',skill:'Perfekt',type:'text',source:SOURCE_PERF,
+  prompt:'3. Person Plural Perfekt von „esse“',answers:['fuerunt'],
+  explain:'esse → fuerunt.'}
+];
+
+function shuffle(a){
+ a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;
+}
+function cleanLatinHead(s){return s.split(',')[0].replace(/\s*\+.*/,'').trim()}
+function addVocabulary(){
+ const german=vocab.map(x=>x[1]);
+ const latin=vocab.map(x=>x[0]);
+ vocab.forEach(([lat,de],i)=>{
+   let opts=shuffle([de,...[1,5,9].map(k=>german[(i+k)%german.length]).filter(x=>x!==de)]);
+   opts=[...new Set(opts)].slice(0,4);
+   while(opts.length<4){const x=german[Math.floor(Math.random()*german.length)];if(!opts.includes(x))opts.push(x)}
+   questions.push({id:'v_ld_'+i,skill:'Vokabeln',type:'mc',source:SOURCE_PREP,
+     prompt:'Was bedeutet …?',context:lat,options:opts,answer:opts.indexOf(de),explain:lat+' → '+de});
+   const target=cleanLatinHead(lat);
+   let latOpts=shuffle([target,...[2,7,11].map(k=>cleanLatinHead(latin[(i+k)%latin.length])).filter(x=>x!==target)]);
+   latOpts=[...new Set(latOpts)].slice(0,4);
+   while(latOpts.length<4){const x=cleanLatinHead(latin[Math.floor(Math.random()*latin.length)]);if(!latOpts.includes(x))latOpts.push(x)}
+   questions.push({id:'v_dl_'+i,skill:'Vokabeln',type:'mc',source:SOURCE_PREP,
+     prompt:'Wie heißt das auf Latein?',context:de,options:latOpts,answer:latOpts.indexOf(target),explain:de+' → '+target});
+ });
+}
+function addDeclensions(){
+ const keys=Object.keys(caseLabel);
+ nouns.forEach(n=>{
+   keys.forEach(k=>{
+     questions.push({id:'d_'+n.lemma+'_'+k,skill:'Deklination',type:'text',source:SOURCE_PREP,
+       prompt:'Bilde die Form.',sub:caseLabel[k],context:n.lemma,answers:[n.forms[k]],
+       explain:n.lemma+' · '+caseLabel[k]+' → '+n.forms[k]});
+   });
+   const groups={};
+   keys.forEach(k=>(groups[n.forms[k]]??=[]).push(k));
+   Object.entries(groups).forEach(([form,ks])=>{
+     if(ks.length!==1)return;
+     const k=ks[0],wrong=shuffle(keys.filter(x=>x!==k)).slice(0,3);
+     const labels=shuffle([caseLabel[k],...wrong.map(x=>caseLabel[x])]);
+     questions.push({id:'a_'+n.lemma+'_'+k,skill:'Deklination',type:'mc',source:SOURCE_PREP,
+       prompt:'Welche Form ist das?',context:form+'  ←  '+n.lemma,options:labels,
+       answer:labels.indexOf(caseLabel[k]),explain:form+' = '+caseLabel[k]+' von '+n.lemma+'.'});
+   });
+ });
+}
+addVocabulary();addDeclensions();
+
+let state=load(),session=[],pos=0,secure=0,locked=false,start=0,currentMode='mix';
+
+function load(){
+ try{return JSON.parse(localStorage.getItem(STORE))||{events:[],q:{},skills:{}}}
+ catch(_){return {events:[],q:{},skills:{}}}
+}
+function save(){localStorage.setItem(STORE,JSON.stringify(state))}
+function normalize(s){return String(s).trim().toLowerCase().replace(/[.,;:!?]/g,'')}
+
+function weight(q){
+ const x=state.q[q.id]||{},sk=state.skills[q.skill]||{right:0,total:0};
+ const acc=sk.total?sk.right/sk.total:.72;
+ let w=.8+(1-acc)*2.1;
+ if(x.lastWrong)w+=2.2;if(!x.due||x.due<=Date.now())w+=.55;else w*=.35;
+ if([SOURCE_ERROR].includes(q.source))w+=.9;
+ return Math.max(.12,w);
+}
+function weighted(pool,exclude){
+ const p=pool.filter(q=>!exclude.has(q.id));if(!p.length)return null;
+ let total=p.reduce((s,q)=>s+weight(q),0),r=Math.random()*total;
+ for(const q of p){r-=weight(q);if(r<=0)return q}return p[0];
+}
+function pickMany(pool,n){
+ const out=[],used=new Set();
+ while(out.length<n&&pool.length){
+   let q=weighted(pool,used);
+   if(!q){used.clear();q=weighted(pool,used)}
+   if(!q)break;out.push(q);used.add(q.id);
+   if(used.size>=pool.length)used.clear();
+ }
+ return out;
+}
+function makeSession(mode,n){
+ let out=[];
+ if(mode==='words')out=pickMany(questions.filter(q=>q.skill==='Vokabeln'),n);
+ else if(mode==='forms')out=pickMany(questions.filter(q=>['Deklination','Kasus & Funktion','Satzanalyse'].includes(q.skill)),n);
+ else{
+   const v=Math.max(2,Math.round(n*.35));
+   out=[...pickMany(questions.filter(q=>q.skill==='Vokabeln'),v),
+        ...pickMany(questions.filter(q=>q.skill!=='Vokabeln'),n-v)];
+   out=shuffle(out);
+ }
+ return out;
+}
+function setTheme(skill){
+ const [a,b]=palette[skill]||['#7457ff','#ece8ff'];
+ document.documentElement.style.setProperty('--accent',a);
+ document.documentElement.style.setProperty('--accent2',b);
+}
+function show(id){
+ document.body.classList.toggle('home-active',id==='home');
+ document.querySelectorAll('.screen').forEach(x=>x.classList.remove('show'));
+ document.getElementById(id).classList.add('show');
+ document.getElementById('homeBtn').hidden=id==='home';
+}
+function startLesson(mode,n){
+ currentMode=mode;session=makeSession(mode,n);pos=0;secure=0;show('lesson');render();
+}
+function render(){
+ const q=session[pos],finish=document.getElementById('finish');
+ document.getElementById('options').style.display='grid';
+ document.getElementById('answerbox').hidden=true;
+ document.getElementById('feedback').className='feedback';
+ document.getElementById('feedback').textContent='';
+ document.getElementById('nextBtn').classList.remove('show');
+ finish.classList.remove('show');locked=false;
+ document.getElementById('textAnswer').value='';
+
+ if(!q){
+   endSession();return;
+ }
+ setTheme(q.skill);
+ document.getElementById('counter').textContent=`Frage ${pos+1} von ${session.length}`;
+ document.getElementById('secureCount').textContent=`heute ${secure} sicher`;
+ document.getElementById('progress').style.width=(pos/session.length*100)+'%';
+ document.getElementById('tagText').textContent=q.skill;
+ document.getElementById('prompt').textContent=q.prompt;
+ document.getElementById('sub').textContent=q.sub||'';
+ const ctx=document.getElementById('context');ctx.hidden=!q.context;ctx.textContent=q.context||'';
+ document.getElementById('source').textContent=q.source;
+ const opts=document.getElementById('options');opts.innerHTML='';
+
+ if(q.type==='mc'){
+   q.options.forEach((t,i)=>{
+     const b=document.createElement('button');b.className='option';b.textContent=t;
+     b.onclick=()=>answerMC(i,b);opts.appendChild(b);
+   });
+ }else{
+   opts.style.display='none';document.getElementById('answerbox').hidden=false;
+ }
+ start=performance.now();
+}
+function record(q,correct){
+ const ms=Math.round(performance.now()-start);
+ const qs=state.q[q.id]||{right:0,total:0,level:0};
+ qs.total++;if(correct)qs.right++;qs.last=Date.now();qs.lastWrong=!correct;
+ qs.level=correct?Math.min(4,(qs.level||0)+1):0;
+ const dueLevel=correct?Math.min(4,qs.level+1):0;
+ qs.due=Date.now()+[0,1,3,7,14][dueLevel]*DAY;state.q[q.id]=qs;
+ const sk=state.skills[q.skill]||{right:0,total:0};
+ sk.total++;if(correct)sk.right++;state.skills[q.skill]=sk;
+ state.events.push({t:new Date().toISOString(),id:q.id,skill:q.skill,correct,response_ms:ms,source:q.source});
+ if(state.events.length>4000)state.events=state.events.slice(-4000);
+ save();
+}
+function feedback(q,correct){
+ const f=document.getElementById('feedback');
+ f.className='feedback '+(correct?'good':'near');
+ f.textContent=(correct?'✓ Sitzt. ':'Fast. ')+q.explain;
+ document.getElementById('nextBtn').classList.add('show');
+ if(correct)secure++;
+ else session.splice(Math.min(session.length,pos+3),0,q);
+}
+function answerMC(i,btn){
+ if(locked)return;locked=true;const q=session[pos],ok=i===q.answer;
+ [...document.querySelectorAll('.option')].forEach((b,j)=>{
+   b.disabled=true;if(j===q.answer)b.classList.add('right');
+ });
+ if(!ok)btn.classList.add('wrong');record(q,ok);feedback(q,ok);
+}
+function checkText(){
+ if(locked)return;const q=session[pos],val=normalize(document.getElementById('textAnswer').value);
+ if(!val)return;locked=true;const ok=q.answers.some(a=>normalize(a)===val);
+ record(q,ok);feedback(q,ok);
+}
+function endSession(){
+ document.getElementById('prompt').textContent='';
+ document.getElementById('sub').textContent='';
+ document.getElementById('context').hidden=true;
+ document.getElementById('options').style.display='none';
+ document.getElementById('answerbox').hidden=true;
+ document.getElementById('feedback').className='feedback';
+ document.getElementById('nextBtn').classList.remove('show');
+ document.getElementById('source').textContent='';
+ document.getElementById('tagText').textContent='Geschafft';
+ document.getElementById('progress').style.width='100%';
+ const ev=state.events.slice(-session.length);
+ const score=ev.length?Math.round(ev.filter(x=>x.correct).length/ev.length*100):0;
+ document.getElementById('finishText').textContent=
+   score>=85?'Sehr stabil. Morgen reichen wieder ein paar Minuten.':
+   score>=65?'Gute Runde. Die unsicheren Sachen kommen automatisch wieder.':
+   'Heute war Trainingstag. Genau die schwierigen Formen kommen wieder.';
+ const by={};
+ ev.forEach(x=>{const s=by[x.skill]??={r:0,t:0};s.t++;if(x.correct)s.r++});
+ const arr=Object.entries(by).map(([k,v])=>[k,v.r/v.t]).sort((a,b)=>b[1]-a[1]);
+ document.getElementById('strongSkill').textContent=arr[0]?.[0]||'–';
+ document.getElementById('weakSkill').textContent=arr.at(-1)?.[0]||'–';
+ document.getElementById('finish').classList.add('show');
+}
+function updateHome(){
+ const ranked=Object.entries(state.skills).map(([k,v])=>[k,v.total?v.right/v.total:1]).sort((a,b)=>a[1]-b[1]);
+ const defaults=['Kasus & Funktion','Deklination'];
+ const names=(ranked.length?ranked.slice(0,2).map(x=>x[0]):defaults);
+ const box=document.getElementById('focusChips');box.innerHTML='';
+ names.forEach(n=>{const s=document.createElement('span');s.className='focuschip';s.textContent=n;box.appendChild(s)});
+}
+function showParents(){
+ show('parents');
+ const e=state.events,firstAcc=e.length?Math.round(e.filter(x=>x.correct).length/e.length*100):null;
+ document.getElementById('sFirst').textContent=firstAcc===null?'–':firstAcc+'%';
+ document.getElementById('sCount').textContent=e.length;
+ document.getElementById('sDue').textContent=Object.entries(state.q).filter(([_,x])=>!x.due||x.due<=Date.now()).length;
+ const box=document.getElementById('skills');box.innerHTML='';
+ Object.entries(state.skills).sort((a,b)=>a[1].right/a[1].total-b[1].right/b[1].total).forEach(([name,s])=>{
+   const pct=Math.round(s.right/s.total*100);
+   box.insertAdjacentHTML('beforeend',
+    `<div class="skill"><div class="skillrow"><span>${name}</span><b>${pct}% · ${s.total}</b></div>
+     <div class="bar"><div style="width:${pct}%"></div></div></div>`);
+ });
+}
+function exportData(){
+ const blob=new Blob([JSON.stringify({app:'Alisa Latein Trainer',version:2,exported:new Date().toISOString(),...state},null,2)],{type:'application/json'});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+ a.download='alisa-latein-statistik-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+ setTimeout(()=>URL.revokeObjectURL(a.href),800);
+}
+
+// ponytail self-check: catches accidental source/data breakage without a test framework.
+console.assert(vocab.length===36,'Vokabelbasis unerwartet verändert');
+console.assert(questions.some(q=>q.id==='cum_philippo'),'Fehlerlog-Frage fehlt');
+console.assert(nouns.find(n=>n.lemma==='mercator').forms.ablS==='mercatore','Deklination mercator kaputt');
+console.assert(document.querySelectorAll('#tables .ref-pane').length===3,'Tabellenbereiche unvollständig');
+
+document.querySelectorAll('.mode[data-mode]').forEach(b=>b.onclick=()=>startLesson(b.dataset.mode,Number(b.dataset.n)));
+document.getElementById('tablesBtn').onclick=()=>show('tables');
+document.getElementById('tablesHome').onclick=()=>{show('home');updateHome()};
+document.querySelectorAll('.ref-tab').forEach(btn=>btn.onclick=()=>{
+ document.querySelectorAll('.ref-tab').forEach(x=>x.classList.toggle('active',x===btn));
+ document.querySelectorAll('.ref-pane').forEach(p=>p.classList.toggle('show',p.id==='ref-'+btn.dataset.ref));
+});
+
+document.getElementById('nextBtn').onclick=()=>{pos++;render()};
+document.getElementById('checkBtn').onclick=checkText;
+document.getElementById('textAnswer').addEventListener('keydown',e=>{if(e.key==='Enter')checkText()});
+document.getElementById('homeBtn').onclick=()=>{show('home');updateHome()};
+document.getElementById('finishHome').onclick=()=>{show('home');updateHome()};
+document.getElementById('fiveMore').onclick=()=>startLesson(currentMode,5);
+document.getElementById('parentBtn').onclick=showParents;
+document.getElementById('parentBack').onclick=()=>{show('home');updateHome()};
+document.getElementById('exportBtn').onclick=exportData;
+
+updateHome();
+</script>
+</body>
+</html>
