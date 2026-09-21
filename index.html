@@ -749,7 +749,60 @@ let questions=[
   explain:'tacere → tacuit.'},
  {id:'perf_fuerunt',skill:'Perfekt',type:'text',source:SOURCE_PERF,
   prompt:'3. Person Plural Perfekt von „esse“',answers:['fuerunt'],
-  explain:'esse → fuerunt.'}
+  explain:'esse → fuerunt.'},
+
+ // Wortschatz 9 · grammatisch relevante Angaben auf S. 60–61
+ {id:'l9_hostis_genpl',skill:'Deklination',type:'text',source:SOURCE_L9,
+  prompt:'Bilde den Genitiv Plural.',sub:'Sonderform: Gen. Pl. -ium',
+  context:'hostis, hostis m.',answers:['hostium'],
+  explain:'Bei hostis steht ausdrücklich: Genitiv Plural -ium → hostium.'},
+ {id:'l9_tiberis_acc',skill:'Deklination',type:'text',source:SOURCE_L9,
+  prompt:'Bilde den Akkusativ Singular.',sub:'Sonderform: Akk. -im',
+  context:'Tiberis, is m.',answers:['tiberim'],
+  explain:'Tiberis hat im Akkusativ Singular die Sonderform Tiberim.'},
+ {id:'l9_tiberis_abl',skill:'Deklination',type:'text',source:SOURCE_L9,
+  prompt:'Bilde den Ablativ Singular.',sub:'Sonderform: Abl. -i',
+  context:'Tiberis, is m.',answers:['tiberi'],
+  explain:'Tiberis hat im Ablativ Singular die Sonderform Tiberi.'},
+ {id:'l9_confidere_dat',skill:'Kasus & Funktion',type:'mc',source:SOURCE_L9,
+  prompt:'Welcher Kasus steht bei „confidere“?',context:'Comitibus confido.',
+  options:['Nominativ','Genitiv','Dativ','Akkusativ'],answer:2,
+  explain:'confidere steht mit Dativ. „Comitibus confido.“ = Ich vertraue meinen Gefährten.'},
+ {id:'l9_constat_aci',skill:'Satzanalyse',type:'mc',source:SOURCE_L9,
+  prompt:'Welche Konstruktion steht bei „constat“?',context:'constat · m. AcI',
+  options:['AcI','Ablativus absolutus','Dativobjekt','cum + Ablativ'],answer:0,
+  explain:'Im Wortschatz ist constat ausdrücklich mit AcI angegeben.'},
+ {id:'l9_putare_aci',skill:'Satzanalyse',type:'mc',source:SOURCE_L9,
+  prompt:'Welche Konstruktion siehst du hier?',context:'Comites venire puto.',
+  options:['AcI','Genitivattribut','Ablativus absolutus','Dativobjekt'],answer:0,
+  explain:'Comites + venire bilden den AcI: „Ich glaube, dass die Gefährten kommen.“'},
+ {id:'l9_ne_quidem',skill:'Satzanalyse',type:'mc',source:SOURCE_L9,
+  prompt:'Wie heißt „nicht einmal die Freunde“?',context:'___ amici ___',
+  options:['ne amici quidem','quidem amici ne','non amici quidem','ne quidem amici'],answer:0,
+  explain:'Die Wortschatzseite gibt das Muster „ne ... quidem“: ne amici quidem.'},
+
+ // Handschriftlich ergänzte Perfektformen aus Wortschatz 9
+ {id:'l9_perf_accessi',skill:'Perfekt',type:'text',source:SOURCE_L9,
+  prompt:'1. Person Singular Perfekt von „accedere“',answers:['accessi'],
+  explain:'accedere, accedo → accessi.'},
+ {id:'l9_perf_contendi',skill:'Perfekt',type:'text',source:SOURCE_L9,
+  prompt:'1. Person Singular Perfekt von „contendere“',answers:['contendi'],
+  explain:'contendere, contendo → contendi.'},
+ {id:'l9_perf_cupivi',skill:'Perfekt',type:'text',source:SOURCE_L9,
+  prompt:'1. Person Singular Perfekt von „cupere“',answers:['cupivi'],
+  explain:'cupere, cupio → cupivi.'},
+ {id:'l9_perf_defendi',skill:'Perfekt',type:'text',source:SOURCE_L9,
+  prompt:'1. Person Singular Perfekt von „defendere“',answers:['defendi'],
+  explain:'defendere, defendo → defendi.'},
+ {id:'l9_perf_circumveni',skill:'Perfekt',type:'text',source:SOURCE_L9,
+  prompt:'1. Person Singular Perfekt von „circumvenire“',answers:['circumveni'],
+  explain:'circumvenire, circumvenio → circumveni.'},
+ {id:'l9_perf_institui',skill:'Perfekt',type:'text',source:SOURCE_L9,
+  prompt:'1. Person Singular Perfekt von „instituere“',answers:['institui'],
+  explain:'instituere, instituo → institui.'},
+ {id:'l9_perf_sumpsi',skill:'Perfekt',type:'text',source:SOURCE_L9,
+  prompt:'1. Person Singular Perfekt von „sumere“',answers:['sumpsi'],
+  explain:'sumere, sumo → sumpsi.'}
 ];
 
 function shuffle(a){
@@ -975,6 +1028,9 @@ function exportData(){
 // ponytail self-check: catches accidental source/data breakage without a test framework.
 console.assert(vocab.length===77,'Vokabelbasis unerwartet verändert');
 console.assert(questions.some(q=>q.id==='cum_philippo'),'Fehlerlog-Frage fehlt');
+console.assert(questions.some(q=>q.id==='l9_confidere_dat'),'Wortschatz-9-Grammatik fehlt');
+console.assert(questions.some(q=>q.id==='l9_tiberis_acc'),'Tiberis-Sonderform fehlt');
+console.assert(questions.filter(q=>q.source===SOURCE_L9&&q.skill==='Perfekt').length>=7,'Wortschatz-9-Perfektformen fehlen');
 console.assert(nouns.find(n=>n.lemma==='mercator').forms.ablS==='mercatore','Deklination mercator kaputt');
 console.assert(document.querySelectorAll('#tables .ref-pane').length===3,'Tabellenbereiche unvollständig');
 
