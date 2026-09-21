@@ -604,6 +604,7 @@ const DAY=86400000;
 const SOURCE_PREP='Vorbereitung 1. Klassenarbeit · 07.09.2026';
 const SOURCE_PERF='Lektion 8 · Perfekt-Auftrag · 02.06.2026';
 const SOURCE_ERROR='Fehlerlog · 13.09.2026';
+const SOURCE_L9='Wortschatz 9 · S. 60–61 · Upload 21.09.2026';
 
 const palette={
   'Vokabeln':['#16805b','#e7fbf3'],
@@ -628,7 +629,48 @@ const vocab=[
  ['necare, neco, necavi','töten'],['orare, oro, oravi','bitten / beten'],
  ['ostendere, ostendo, ostendi','zeigen / erklären'],['parere, pareo, parui','gehorchen'],
  ['properare, propero, properavi','eilen'],['respondere, respondeo, respondi','antworten'],
- ['ridere, rideo, risi','lachen'],['vivere, vivo, vixi','leben']
+ ['ridere, rideo, risi','lachen'],['vivere, vivo, vixi','leben'],
+ ['hostis, hostis m. (Gen. Pl. -ium)','der Feind / der Landesfeind',SOURCE_L9],
+ ['posse, possum, potui','können',SOURCE_L9],
+ ['accedere, accedo, accessi','herbeikommen / hingehen',SOURCE_L9],
+ ['relinquere, relinquo','verlassen / zurücklassen',SOURCE_L9],
+ ['contendere, contendo, contendi','eilen / sich anstrengen / kämpfen',SOURCE_L9],
+ ['adhuc (Adv.)','bis jetzt / (immer) noch',SOURCE_L9],
+ ['tandem (Adv.)','endlich / schließlich',SOURCE_L9],
+ ['cupere, cupio, cupivi','wollen / wünschen / verlangen',SOURCE_L9],
+ ['ripa, ripae f.','das Ufer',SOURCE_L9],
+ ['pons, pontis m.','die Brücke',SOURCE_L9],
+ ['defendere, defendo, defendi','abwehren / verteidigen',SOURCE_L9],
+ ['debere, debeo, debui','müssen / sollen / schulden',SOURCE_L9],
+ ['primum (Adv.)','erstens / zuerst / zum ersten Mal',SOURCE_L9],
+ ['postea (Adv.)','nachher / später',SOURCE_L9],
+ ['procul (Adv.)','von fern / weit weg',SOURCE_L9],
+ ['deinde (Adv.)','dann / darauf',SOURCE_L9],
+ ['postremo (Adv.)','schließlich',SOURCE_L9],
+ ['propius (Adv.)','näher',SOURCE_L9],
+ ['flumen, fluminis n.','der Fluss',SOURCE_L9],
+ ['quidem (Adv.)','freilich / gewiss / wenigstens',SOURCE_L9],
+ ['putare, puto, putavi','glauben / meinen',SOURCE_L9],
+ ['medio in ponte','in der Mitte der Brücke',SOURCE_L9],
+ ['nos (Nom.)','wir',SOURCE_L9],
+ ['deponere, depono, deposui','ablegen / niederlegen / aufgeben',SOURCE_L9],
+ ['patria, patriae f.','die Heimat',SOURCE_L9],
+ ['proelium, proelii n.','der Kampf / die Schlacht',SOURCE_L9],
+ ['ne ... quidem','nicht einmal',SOURCE_L9],
+ ['circumvenire, circumvenio, circumveni','umringen / umzingeln',SOURCE_L9],
+ ['vox, vocis f.','die Stimme / die Äußerung / der Laut',SOURCE_L9],
+ ['confidere, confido (m. Dat.)','vertrauen / sich verlassen (auf)',SOURCE_L9],
+ ['ergo','also / deshalb',SOURCE_L9],
+ ['instituere, instituo, institui','beginnen / einrichten / unterrichten',SOURCE_L9],
+ ['sumere, sumo, sumpsi','nehmen',SOURCE_L9],
+ ['repente (Adv.)','plötzlich',SOURCE_L9],
+ ['constat (m. AcI)','es steht fest / es ist bekannt',SOURCE_L9],
+ ['vulnus, vulneris n.','die Wunde / der (milit.) Verlust',SOURCE_L9],
+ ['fama, famae f.','der (gute/schlechte) Ruf / das Gerücht',SOURCE_L9],
+ ['adesse, adsum, adfui','da sein / helfen',SOURCE_L9],
+ ['Horatius Cocles m.','Horatius Cocles (Held der römischen Frühzeit)',SOURCE_L9],
+ ['Tusci, orum m. Pl.','die Etrusker',SOURCE_L9],
+ ['Tiberis, is m. (Akk. -im, Abl. -i)','der Tiber (Fluss durch Rom)',SOURCE_L9]
 ];
 
 const nouns=[
@@ -717,17 +759,17 @@ function cleanLatinHead(s){return s.split(',')[0].replace(/\s*\+.*/,'').trim()}
 function addVocabulary(){
  const german=vocab.map(x=>x[1]);
  const latin=vocab.map(x=>x[0]);
- vocab.forEach(([lat,de],i)=>{
+ vocab.forEach(([lat,de,source=SOURCE_PREP],i)=>{
    let opts=shuffle([de,...[1,5,9].map(k=>german[(i+k)%german.length]).filter(x=>x!==de)]);
    opts=[...new Set(opts)].slice(0,4);
    while(opts.length<4){const x=german[Math.floor(Math.random()*german.length)];if(!opts.includes(x))opts.push(x)}
-   questions.push({id:'v_ld_'+i,skill:'Vokabeln',type:'mc',source:SOURCE_PREP,
+   questions.push({id:'v_ld_'+i,skill:'Vokabeln',type:'mc',source:source,
      prompt:'Was bedeutet …?',context:lat,options:opts,answer:opts.indexOf(de),explain:lat+' → '+de});
    const target=cleanLatinHead(lat);
    let latOpts=shuffle([target,...[2,7,11].map(k=>cleanLatinHead(latin[(i+k)%latin.length])).filter(x=>x!==target)]);
    latOpts=[...new Set(latOpts)].slice(0,4);
    while(latOpts.length<4){const x=cleanLatinHead(latin[Math.floor(Math.random()*latin.length)]);if(!latOpts.includes(x))latOpts.push(x)}
-   questions.push({id:'v_dl_'+i,skill:'Vokabeln',type:'mc',source:SOURCE_PREP,
+   questions.push({id:'v_dl_'+i,skill:'Vokabeln',type:'mc',source:source,
      prompt:'Wie heißt das auf Latein?',context:de,options:latOpts,answer:latOpts.indexOf(target),explain:de+' → '+target});
  });
 }
@@ -931,7 +973,7 @@ function exportData(){
 }
 
 // ponytail self-check: catches accidental source/data breakage without a test framework.
-console.assert(vocab.length===36,'Vokabelbasis unerwartet verändert');
+console.assert(vocab.length===77,'Vokabelbasis unerwartet verändert');
 console.assert(questions.some(q=>q.id==='cum_philippo'),'Fehlerlog-Frage fehlt');
 console.assert(nouns.find(n=>n.lemma==='mercator').forms.ablS==='mercatore','Deklination mercator kaputt');
 console.assert(document.querySelectorAll('#tables .ref-pane').length===3,'Tabellenbereiche unvollständig');
